@@ -13,44 +13,120 @@
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <style>
-  :root{--bg:#f3f4f9;--texto:#171a2b;--suave:#7a7f96;--pista:#e4e5f0}
-  @media (prefers-color-scheme: dark){:root{--bg:#0d0f17;--texto:#eef0f8;--suave:#8f94ab;--pista:#212536}}
+  :root{--bg:#f3f4f9;--texto:#171a2b;--suave:#7a7f96;--pista:#e4e5f0;--halo:rgba(109,40,217,.16)}
+  @media (prefers-color-scheme: dark){:root{--bg:#0d0f17;--texto:#eef0f8;--suave:#8f94ab;--pista:#212536;--halo:rgba(124,116,255,.18)}}
   html,body{margin:0;height:100%;background:var(--bg);overflow:hidden}
   iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:var(--bg);color-scheme:normal}
+
   #carga{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
-    background:var(--bg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;transition:opacity .2s ease}
-  #carga.fuera{opacity:0;pointer-events:none}
-  .logo{width:96px;height:96px;border-radius:28px;box-shadow:0 12px 32px rgba(79,70,229,.35);
-    animation:latir 1.6s ease-in-out infinite}
-  h1{margin:22px 0 4px;font-size:22px;font-weight:700;color:var(--texto);letter-spacing:-.2px}
-  p{margin:0;font-size:14px;color:var(--suave)}
-  .barra{width:120px;height:4px;border-radius:4px;background:var(--pista);overflow:hidden;margin-top:26px}
-  .barra i{display:block;width:40%;height:100%;border-radius:4px;
-    background:linear-gradient(90deg,#4338ca,#6d28d9,#a21caf);animation:correr 1.1s ease-in-out infinite}
+    background:var(--bg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    transition:opacity .45s ease, transform .45s cubic-bezier(.6,0,.2,1)}
+  #carga.fuera{opacity:0;transform:translateY(-24px) scale(1.02);pointer-events:none}
+
+  /* halo que respira detrás del logo */
+  .escena{position:relative;width:132px;height:132px;display:grid;place-items:center}
+  .escena::before,.escena::after{content:'';position:absolute;inset:0;border-radius:50%;background:var(--halo);
+    animation:onda 2.4s ease-out infinite}
+  .escena::after{animation-delay:1.2s}
+
+  /* logo animado: las barras suben y la flecha se dibuja */
+  .logo{position:relative;width:104px;height:104px;border-radius:30px;overflow:hidden;
+    box-shadow:0 16px 36px rgba(79,70,229,.38);animation:entrar .6s cubic-bezier(.2,1.3,.4,1) both}
+  .logo svg{display:block;width:100%;height:100%}
+  .b{transform-box:fill-box;transform-origin:50% 100%;transform:scaleY(0);animation:subir .55s cubic-bezier(.2,1.2,.4,1) forwards}
+  .b1{animation-delay:.25s}.b2{animation-delay:.4s}.b3{animation-delay:.55s}
+  .flecha{stroke-dasharray:420;stroke-dashoffset:420;animation:dibujar .8s ease-out .75s forwards}
+  .brillo{position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.35) 50%,transparent 65%);
+    transform:translateX(-120%);animation:brillar 2.6s ease-in-out 1.5s infinite}
+
+  .saludo{margin:26px 0 6px;font-size:13px;font-weight:600;letter-spacing:.3px;color:var(--suave);
+    opacity:0;animation:aparecer .5s ease .5s forwards}
+  h1{margin:0;font-size:24px;font-weight:800;color:var(--texto);letter-spacing:-.4px;
+    opacity:0;animation:aparecer .5s ease .65s forwards}
+  .frase{height:20px;margin-top:10px;overflow:hidden;font-size:14px;color:var(--suave);text-align:center;
+    opacity:0;animation:aparecer .5s ease .8s forwards}
+  .frase span{display:block;transition:transform .35s ease, opacity .35s ease}
+  .frase span.sale{transform:translateY(-100%);opacity:0}
+  .frase span.entra{transform:translateY(100%);opacity:0}
+
+  .puntos{display:flex;gap:7px;margin-top:22px;opacity:0;animation:aparecer .5s ease .9s forwards}
+  .puntos i{width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,#4338ca,#a21caf);animation:saltar 1s ease-in-out infinite}
+  .puntos i:nth-child(2){animation-delay:.15s}.puntos i:nth-child(3){animation-delay:.3s}
+
   #abrir{position:absolute;bottom:calc(32px + env(safe-area-inset-bottom));display:none;
     color:#6d28d9;font-size:14px;text-decoration:none;padding:10px 16px;border-radius:12px;background:var(--pista)}
   @media (prefers-color-scheme: dark){#abrir{color:#b4a9ff}}
-  @keyframes correr{0%{transform:translateX(-100%)}100%{transform:translateX(250%)}}
-  @keyframes latir{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+
+  @keyframes onda{0%{transform:scale(.7);opacity:1}100%{transform:scale(1.5);opacity:0}}
+  @keyframes entrar{0%{transform:scale(.6) rotate(-8deg);opacity:0}100%{transform:none;opacity:1}}
+  @keyframes subir{to{transform:scaleY(1)}}
+  @keyframes dibujar{to{stroke-dashoffset:0}}
+  @keyframes brillar{0%{transform:translateX(-120%)}60%,100%{transform:translateX(120%)}}
+  @keyframes aparecer{to{opacity:1}}
+  @keyframes saltar{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(-6px);opacity:1}}
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.01s!important;animation-delay:0s!important}}
 </style>
 </head>
 <body>
 <iframe id="app" title="Mis Finanzas" src="https://script.google.com/macros/s/AKfycbxJfKjvMap61W9evcIW6NbXeOHnSuRm9E4thuHp1oY0oiCyotC938fXmoFUIC3LARqu/exec"></iframe>
 <div id="carga">
-  <img class="logo" src="icon-192.png" alt="">
+  <div class="escena">
+    <div class="logo">
+      <svg viewBox="0 0 512 512" aria-hidden="true">
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#4337ca"/><stop offset=".5" stop-color="#6a2ad8"/><stop offset="1" stop-color="#a11caf"/>
+          </linearGradient>
+        </defs>
+        <rect width="512" height="512" fill="url(#g)"/>
+        <rect class="b b1" x="110" y="300" width="64" height="102" rx="16" fill="#fff" fill-opacity=".55"/>
+        <rect class="b b2" x="200" y="240" width="64" height="162" rx="16" fill="#fff" fill-opacity=".8"/>
+        <rect class="b b3" x="290" y="175" width="64" height="227" rx="16" fill="#fff"/>
+        <path class="flecha" d="M112 250 L208 178 L282 208 L396 108 M342 102 L400 102 L400 160" fill="none"
+              stroke="#fde68a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="brillo"></div>
+    </div>
+  </div>
+  <div class="saludo" id="saludo">Hola</div>
   <h1>Mis Finanzas</h1>
-  <p>Cargando tus cuentas…</p>
-  <div class="barra"><i></i></div>
+  <div class="frase"><span id="frase">Abriendo tu billetera…</span></div>
+  <div class="puntos"><i></i><i></i><i></i></div>
   <a id="abrir" href="https://script.google.com/macros/s/AKfycbxJfKjvMap61W9evcIW6NbXeOHnSuRm9E4thuHp1oY0oiCyotC938fXmoFUIC3LARqu/exec">¿No carga? Ábrela en el navegador</a>
 </div>
 <script>
-  var carga = document.getElementById('carga');
-  document.getElementById('app').addEventListener('load', function () {
-    carga.classList.add('fuera');
-    setTimeout(function () { carga.remove(); }, 250);
-  });
-  setTimeout(function () { var a = document.getElementById('abrir'); if (a) a.style.display = 'block'; }, 10000);
-  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+  (function () {
+    var h = new Date().getHours();
+    document.getElementById('saludo').textContent =
+      (h < 6 ? '🌙 Trasnochando' : h < 12 ? '☀️ Buenos días' : h < 19 ? '🌤️ Buenas tardes' : '🌙 Buenas noches') + ', Manuel';
+
+    var frases = ['Abriendo tu billetera…', 'Contando tus soles…', 'Revisando tus cuentas…',
+                  'Calculando cuánto puedes gastar hoy…', 'Acercándote a tu computadora 💻'];
+    var el = document.getElementById('frase'), k = 0;
+    var giro = setInterval(function () {
+      el.className = 'sale';
+      setTimeout(function () {
+        k = (k + 1) % frases.length; el.textContent = frases[k];
+        el.className = 'entra';
+        requestAnimationFrame(function () { requestAnimationFrame(function () { el.className = ''; }); });
+      }, 350);
+    }, 1400);
+
+    var carga = document.getElementById('carga'), inicio = Date.now(), listo = false;
+    function salir() {
+      if (listo) return; listo = true;
+      // deja ver la animación del logo al menos un momento, sin demorar de más
+      var espera = Math.max(0, 1300 - (Date.now() - inicio));
+      setTimeout(function () {
+        clearInterval(giro);
+        carga.classList.add('fuera');
+        setTimeout(function () { carga.remove(); }, 500);
+      }, espera);
+    }
+    document.getElementById('app').addEventListener('load', salir);
+    setTimeout(function () { var a = document.getElementById('abrir'); if (a) a.style.display = 'block'; }, 10000);
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+  })();
 </script>
 </body>
 </html>
