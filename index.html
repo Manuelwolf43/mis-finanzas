@@ -4,31 +4,50 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Mis Finanzas</title>
-<meta name="theme-color" content="#0d1018">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f3f4f9">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0d0f17">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <style>
-  html,body{margin:0;height:100%;background:#0d1018;overflow:hidden}
-  iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#0d1018}
-  #carga{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
-    background:#0d1018;color:#c9c3e6;font:15px system-ui,sans-serif;transition:opacity .3s}
-  #carga img{width:84px;height:84px;border-radius:22px}
-  #carga a{color:#a78bfa;font-size:13px;display:none}
+  :root{--bg:#f3f4f9;--texto:#171a2b;--suave:#7a7f96;--pista:#e4e5f0}
+  @media (prefers-color-scheme: dark){:root{--bg:#0d0f17;--texto:#eef0f8;--suave:#8f94ab;--pista:#212536}}
+  html,body{margin:0;height:100%;background:var(--bg);overflow:hidden}
+  iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:var(--bg);color-scheme:normal}
+  #carga{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:var(--bg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;transition:opacity .35s ease}
+  #carga.fuera{opacity:0;pointer-events:none}
+  .logo{width:96px;height:96px;border-radius:28px;box-shadow:0 12px 32px rgba(79,70,229,.35);
+    animation:latir 1.6s ease-in-out infinite}
+  h1{margin:22px 0 4px;font-size:22px;font-weight:700;color:var(--texto);letter-spacing:-.2px}
+  p{margin:0;font-size:14px;color:var(--suave)}
+  .barra{width:120px;height:4px;border-radius:4px;background:var(--pista);overflow:hidden;margin-top:26px}
+  .barra i{display:block;width:40%;height:100%;border-radius:4px;
+    background:linear-gradient(90deg,#4338ca,#6d28d9,#a21caf);animation:correr 1.1s ease-in-out infinite}
+  #abrir{position:absolute;bottom:calc(32px + env(safe-area-inset-bottom));display:none;
+    color:#6d28d9;font-size:14px;text-decoration:none;padding:10px 16px;border-radius:12px;background:var(--pista)}
+  @media (prefers-color-scheme: dark){#abrir{color:#b4a9ff}}
+  @keyframes correr{0%{transform:translateX(-100%)}100%{transform:translateX(250%)}}
+  @keyframes latir{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
 </style>
 </head>
 <body>
 <iframe id="app" title="Mis Finanzas" src="https://script.google.com/macros/s/AKfycbxJfKjvMap61W9evcIW6NbXeOHnSuRm9E4thuHp1oY0oiCyotC938fXmoFUIC3LARqu/exec"></iframe>
 <div id="carga">
-  <img src="icon-192.png" alt="">
-  <div>Cargando Mis Finanzas…</div>
+  <img class="logo" src="icon-192.png" alt="">
+  <h1>Mis Finanzas</h1>
+  <p>Cargando tus cuentas…</p>
+  <div class="barra"><i></i></div>
   <a id="abrir" href="https://script.google.com/macros/s/AKfycbxJfKjvMap61W9evcIW6NbXeOHnSuRm9E4thuHp1oY0oiCyotC938fXmoFUIC3LARqu/exec">¿No carga? Ábrela en el navegador</a>
 </div>
 <script>
   var carga = document.getElementById('carga');
   document.getElementById('app').addEventListener('load', function () {
-    carga.style.opacity = '0';
-    setTimeout(function () { carga.remove(); }, 350);
+    setTimeout(function () {
+      carga.classList.add('fuera');
+      setTimeout(function () { carga.remove(); }, 400);
+    }, 600);
   });
   setTimeout(function () { var a = document.getElementById('abrir'); if (a) a.style.display = 'block'; }, 10000);
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
