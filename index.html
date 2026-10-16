@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mis Finanzas</title>
+<meta name="theme-color" content="#0d1018">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+  html,body{margin:0;height:100%;background:#0d1018;overflow:hidden}
+  iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#0d1018}
+  #carga{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
+    background:#0d1018;color:#c9c3e6;font:15px system-ui,sans-serif;transition:opacity .3s}
+  #carga img{width:84px;height:84px;border-radius:22px}
+  #carga a{color:#a78bfa;font-size:13px;display:none}
+</style>
+</head>
+<body>
+<iframe id="app" title="Mis Finanzas" src="https://script.google.com/macros/s/AKfycbxJfKjvMap61W9evcIW6NbXeOHnSuRm9E4thuHp1oY0oiCyotC938fXmoFUIC3LARqu/exec"></iframe>
+<div id="carga">
+  <img src="icon-192.png" alt="">
+  <div>Cargando Mis Finanzas…</div>
+  <a id="abrir" href="https://script.google.com/macros/s/AKfycbxJfKjvMap61W9evcIW6NbXeOHnSuRm9E4thuHp1oY0oiCyotC938fXmoFUIC3LARqu/exec">¿No carga? Ábrela en el navegador</a>
+</div>
+<script>
+  var carga = document.getElementById('carga');
+  document.getElementById('app').addEventListener('load', function () {
+    carga.style.opacity = '0';
+    setTimeout(function () { carga.remove(); }, 350);
+  });
+  setTimeout(function () { var a = document.getElementById('abrir'); if (a) a.style.display = 'block'; }, 10000);
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+</script>
+</body>
+</html>
