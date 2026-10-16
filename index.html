@@ -7,6 +7,8 @@
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f3f4f9">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0d0f17">
+<link rel="preconnect" href="https://script.google.com">
+<link rel="preconnect" href="https://script.googleusercontent.com">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -16,7 +18,7 @@
   html,body{margin:0;height:100%;background:var(--bg);overflow:hidden}
   iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:var(--bg);color-scheme:normal}
   #carga{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
-    background:var(--bg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;transition:opacity .35s ease}
+    background:var(--bg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;transition:opacity .2s ease}
   #carga.fuera{opacity:0;pointer-events:none}
   .logo{width:96px;height:96px;border-radius:28px;box-shadow:0 12px 32px rgba(79,70,229,.35);
     animation:latir 1.6s ease-in-out infinite}
@@ -44,10 +46,8 @@
 <script>
   var carga = document.getElementById('carga');
   document.getElementById('app').addEventListener('load', function () {
-    setTimeout(function () {
-      carga.classList.add('fuera');
-      setTimeout(function () { carga.remove(); }, 400);
-    }, 600);
+    carga.classList.add('fuera');
+    setTimeout(function () { carga.remove(); }, 250);
   });
   setTimeout(function () { var a = document.getElementById('abrir'); if (a) a.style.display = 'block'; }, 10000);
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
